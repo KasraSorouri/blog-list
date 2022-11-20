@@ -10,6 +10,14 @@ describe('dummy', () => {
 })
 
 describe('total likes', () => {
+
+    test('of empty list is zero', () => {
+        const result = listHelper.totalLikes([])
+        expect(result).toBe(0)
+      })
+
+
+
     const listWithOneBlog = [
       {
         _id: '5a422aa71b54a676234d17f8',
@@ -77,7 +85,7 @@ describe('total likes', () => {
         }  
       ]
 
-      test('when list has many blogs, equals the sum of likes of them ', () => {
+      test('of bigger list is calculated right ', () => {
         const result = listHelper.totalLikes(blogs)
         expect(result).toBe(36)
       })
