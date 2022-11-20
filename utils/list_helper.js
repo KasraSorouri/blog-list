@@ -11,7 +11,6 @@ const totalLikes = (blogs) => {
 }
 
 const favoriteBlog = (blogs) => {
-    console.log('blogs ->', blogs)
     const favorite = (blogs.length > 0 ? {likes:0} : null)
 
     blogs.map(blog => {
@@ -26,8 +25,37 @@ const favoriteBlog = (blogs) => {
     return favorite
 }
 
+const mostBlogs = (blogs) => {
+    let authors = (blogs.length > 0 ? [{author:'', blogs: 0}] : null)
+
+    if (blogs.length > 0) {
+      blogs.map(blog => {
+        const author= authors.find(author => author.author === blog.author)
+//        console.log('find reapeted author ->', author);
+        if (author) {
+            author.blogs ++
+        } else {
+            authors = authors.concat({author: blog.author, blogs: 1})
+ //           console.log('39 * authors ->',authors)
+        }
+      })
+    }
+    const most = authors ? {author: '', blogs: 0} : null
+    if (most) {
+      authors.map(author => {
+        if (author.blogs > most.blogs) {
+            most.author = author.author,
+            most.blogs = author.blogs
+        }
+    })
+}
+    console.log('most ->', most)
+    return most
+}
+
 module.exports = {
     dummy,
     totalLikes,
-    favoriteBlog
+    favoriteBlog,
+    mostBlogs
 }
