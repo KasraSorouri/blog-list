@@ -32,8 +32,6 @@ beforeEach(async () => {
 
     blogObject = new Blog(blogTester.initialBlogs[4])
     await blogObject.save()
-    blogObject = new Blog(blogTester.initialBlogs[5])
-    await blogObject.save()
 
 /*   
     blogTester.initialBlogs.forEach(async (blog) => {
@@ -57,11 +55,38 @@ test('blogs are returend as json', async () => {
  
 test('there are six blogs', async () => {
     const response = await api.get('/api/blogs')
-    console.log('****',response.body.length)
     expect(response.body).toHaveLength(blogTester.initialBlogs.length)
 })
 
+test('id is unique identifier', async () => {
+    const blogs = await Blog.find()
+    const blogToCheck = blogs[0]
+//    console.log('ckeck -> ',blogToCheck.id);
+    expect(blogToCheck.id).toBeDefined()
+})
 
+describe('post new item', () => {
+    test('new item add to database' , async () => {
+        const initialBlogs = await api.get('/api/blogs')
+
+        const blogObject = {
+            title: "Type wars",
+            author: "Robert C. Martin",
+            url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
+            likes: 2,
+        }
+
+        await api
+            .post('/api/blogs')
+            .send(blogObject)
+            
+        const blogs = await api.get('/api/blogs')
+        expect(blogs.body.length).toBe(initialBlogs.body.length+1)
+        
+        const urls = blogs.body.map(blog => blog.url)
+        expect(urls).toContain('http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html')
+    })
+})
 
 
 
