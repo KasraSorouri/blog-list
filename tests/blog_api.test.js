@@ -126,15 +126,16 @@ describe('malformed data is not added', () => {
 })
 
 describe('change specific blog', () => {
-    test('delete a blogf', async () => {
+    test('delete a blog', async () => {
         const initialBlogs = await api.get('/api/blogs')
         const id = initialBlogs.body[0].id
 
-        await api.delete(`/api/blogs/:${id}`)
+        await api
+            .delete(`/api/blogs/:${id}`)
             .expect(204)
         
         const afterDelete = await api.get('/api/blogs')
-        console.log('befoe delete:', initialBlogs.body.length, '    after delete:', afterDelete.body.length);
+//        console.log('befoe delete:', initialBlogs.body.length, '    after delete:', afterDelete.body.length);
         expect(afterDelete.body.length).toBe(initialBlogs.body.length-1)
     })
 })
