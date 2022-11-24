@@ -1,6 +1,4 @@
 const blogRouter = require('express').Router()
-const { json } = require('express')
-const blog = require('../models/blog')
 const Blog = require('../models/blog')
 
 blogRouter.get('/', async (request, response) => {
@@ -8,12 +6,11 @@ blogRouter.get('/', async (request, response) => {
   response.json(blogs)
 })
   
-  blogRouter.post('/', async (request, response) => {
-    const blogObject = new Blog(request.body)
-  
-    const blog = await blogObject.save()
-    response.status(201)
-    response.json(Blog)
-  })
+blogRouter.post('/', async (request, response) => {
+  const blogObject = new Blog(request.body)
+    
+  const blog = await blogObject.save()
+  response.status(201).json(blog)
+})
 
-  module.exports = blogRouter
+module.exports = blogRouter

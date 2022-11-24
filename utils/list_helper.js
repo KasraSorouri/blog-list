@@ -21,7 +21,7 @@ const favoriteBlog = (blogs) => {
             }
         
     })
-    console.log(favorite)
+//    console.log(favorite)
     return favorite
 }
 
@@ -49,7 +49,7 @@ const mostBlogs = (blogs) => {
         }
     })
 }
-    console.log('most ->', most)
+//    console.log('most ->', most)
     return most
 }
 
@@ -77,7 +77,7 @@ const mostLikes = (blogs) => {
         }
     })
 }
-    console.log('most ->', most)
+//    console.log('most ->', most)
     return most
 }
 
