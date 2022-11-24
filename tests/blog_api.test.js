@@ -9,7 +9,7 @@ const api = supertest(app)
 beforeEach(async () => {
     await Blog.deleteMany({})
     console.log('cleared');
-
+/*
     let blogObject = new Blog(blogTester.initialBlogs[0])
     await blogObject.save()
     blogObject = new Blog(blogTester.initialBlogs[1])
@@ -21,13 +21,10 @@ beforeEach(async () => {
     blogObject = new Blog(blogTester.initialBlogs[4])
     await blogObject.save()
 
-/*
-    blogTester.initialBlogs.forEach(async (blog) => {
-
-        let blogObject = new Blog(blog)
-        await blogObject.save()
-    },1000000)
 */
+    const blogObjects = blogTester.initialBlogs.map(blog => new Blog(blog))
+    const promiseArray = blogObjects.map(blog => blog.save())
+    await Promise.all(promiseArray)
 
     console.log('inisialization done!');
 },)
@@ -41,14 +38,13 @@ test('blogs are returend as json', async () => {
  
 test('there are five blogs', async () => {
     const response = await api.get('/api/blogs')
-    console.log('test check ====',response.body);
     expect(response.body).toHaveLength(blogTester.initialBlogs.length)
 })
 
 test('id is unique identifier', async () => {
     const blogs = await api.get('/api/blogs')
     const blogToCheck = blogs.body[0]
-    console.log('ckeck -> ',blogs.body);
+//    console.log('ckeck -> ',blogs.body);
     expect(blogToCheck.id).toBeDefined()
 })
 
