@@ -8,7 +8,7 @@ const api = supertest(app)
 
 beforeEach(async () => {
     await Blog.deleteMany({})
-    console.log('cleared');
+//    console.log('cleared');
 /*
     let blogObject = new Blog(blogTester.initialBlogs[0])
     await blogObject.save()
@@ -26,27 +26,30 @@ beforeEach(async () => {
     const promiseArray = blogObjects.map(blog => blog.save())
     await Promise.all(promiseArray)
 
-    console.log('inisialization done!');
+//    console.log('inisialization done!');
 },)
+describe('receive blogs', () => {
+    test('blogs are returend as json', async () => {
+        await api
+            .get('/api/blogs')
+            .expect(200)
+            .expect('content-type', /application\/json/)
+    })
+     
+    test('there are five blogs', async () => {
+        const response = await api.get('/api/blogs')
+        expect(response.body).toHaveLength(blogTester.initialBlogs.length)
+    })
+    
+    test('id is unique identifier', async () => {
+        const blogs = await api.get('/api/blogs')
+        const blogToCheck = blogs.body[0]
+    //    console.log('ckeck -> ',blogs.body);
+        expect(blogToCheck.id).toBeDefined()
+    })
 
-test('blogs are returend as json', async () => {
-    await api
-        .get('/api/blogs')
-        .expect(200)
-        .expect('content-type', /application\/json/)
-})
- 
-test('there are five blogs', async () => {
-    const response = await api.get('/api/blogs')
-    expect(response.body).toHaveLength(blogTester.initialBlogs.length)
 })
 
-test('id is unique identifier', async () => {
-    const blogs = await api.get('/api/blogs')
-    const blogToCheck = blogs.body[0]
-//    console.log('ckeck -> ',blogs.body);
-    expect(blogToCheck.id).toBeDefined()
-})
 
 describe('post new item', () => {
     test('new item add to database' , async () => {
