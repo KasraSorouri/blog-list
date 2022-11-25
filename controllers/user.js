@@ -10,6 +10,19 @@ userRouter.get('/', async (request, response) => {
 
 userRouter.post('/', async (request, response) => {
     const { username, name, password } = request.body
+
+    if (password.length < 3) {
+        return response.status(400).json({
+            error: 'password must have at least 3 character length'
+        })
+    }
+
+    const existUser = await User.findOne({ username })
+    if (existUser) {
+        response.status(400).json({
+            error: 'this username is taken before'
+        })
+    }
     
     const passwordHash = await bcrypt.hash(password, 10)
     const user = new User({
