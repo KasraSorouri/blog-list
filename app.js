@@ -25,9 +25,10 @@ mongoose.connect(config.MONGODB_URI)
     
     app.use(middleware.requestLogger)
     app.use(middleware.tokenExtractor)
+    //app.use(middleware.userExtractor)
 
     app.use('/api/login', loginRouter)
-    app.use('/api/blogs',blogRouter)
+    app.use('/api/blogs', middleware.userExtractor, blogRouter)
     app.use('/api/users',userRouter)
 
     app.use(middleware.unknownEndpoint)

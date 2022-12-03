@@ -1,5 +1,6 @@
 const { request, response } = require('express')
 const logger = require('./logger')
+const jwt = require('jsonwebtoken')
 
 const requestLogger = (request, response, next) => {
   logger.info('Method:', request.method)
@@ -36,9 +37,20 @@ const tokenExtractor = (request, response, next) => {
   next()
 }
 
+const userExtractor = (request, response, next) => {
+  const decodeToken = jwt.verify(request.token, process.env.SECRET)
+  console.log('decode Token -> ', decodeToken)
+  request.user = decodeToken.id
+
+  next ()
+}
+
+
+
 module.exports = {
   requestLogger,
   unknownEndpoint,
   errorHandler,
-  tokenExtractor
+  tokenExtractor,
+  userExtractor 
 }
