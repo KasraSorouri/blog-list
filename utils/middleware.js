@@ -39,7 +39,7 @@ const tokenExtractor = (request, response, next) => {
 
 const userExtractor = (request, response, next) => {
   const decodeToken = jwt.verify(request.token, process.env.SECRET)
-  console.log('decode Token -> ', decodeToken)
+//  console.log('decode Token -> ', decodeToken)
   request.user = decodeToken.id
 
   next ()

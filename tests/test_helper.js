@@ -1,12 +1,17 @@
+const app = require('../app')
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
 
 const initialBlogs = [
     {
         title: "React patterns",
         author: "Michael Chan",
         url: "https://reactpatterns.com/",
-        likes: 7
+    likes: 7,
+    user:'638bf6297cd52fe556d95d31'
+        
       },
       {
         title: "Go To Statement Considered Harmful",
@@ -45,16 +50,30 @@ const userInDb = async () => {
 }
 
 const initialUser = async () => {
-  const user = {
+  const user = new User ({
     username: 'username',
     name: 'user',
-    password: '1234',
+    passwordHash: await bcrypt.hash('1234',10),
+  })
+  await user.save()
+}
+
+const tokenMaker = async () => {
+  await initialUser()
+  const user = await User.findOne({ username : 'username' })
+  const userForToken = {
+    username : user.username,
+    id : user._id
   }
+
+  const token = await jwt.sign(userForToken, process.env.SECRET)
+  return token
 }
 
 module.exports = {
   initialBlogs,
   blogsInDb,
   userInDb,
-  initialUser
+  initialUser,
+  tokenMaker
 }
