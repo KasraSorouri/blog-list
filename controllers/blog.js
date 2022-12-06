@@ -64,7 +64,7 @@ blogRouter.put('/:id', async (request, response) => {
   console.log('id', id);
   console.log('request>', request.body)
 
-  const user = await User.findById(request.body.user.id)
+  const user = await User.findById(request.body.user)
 
   const blogObject = {
     title: request.body.title,
